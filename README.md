@@ -6,6 +6,8 @@ Tags: aiflow 亚信 gulp
 
 [TOC]
 
+在使用该工具前，请自行安装好 node 运行环境。
+
 ## 1. 项目初始化，安装相关依赖
 
 ```bash
@@ -24,7 +26,15 @@ npm start
 src/common/config/config.js
 ```js
 export default {
-    port: 1234
+  // 服务开启到监听端口
+  port: 1234,
+  // 开启时间监控后，同步服务所监听的端口
+  sync_port: 3000,
+  // MVC架构中，逻辑层中，默认的控制器名称
+  // 该名称直接决定视图层（view）的文件命名前缀(app_xxx.html)
+  default_controller: "app",
+  // 项目配置文件的前缀
+  pro_conf_pref: "aipro",
 }
 ```
 框架默认的端口号为：1234  
@@ -49,10 +59,12 @@ export default {
             name: 'gqkuandai',
             // 项目标题
             title: '陕西宽带国庆活动',
-            // 项目类型： web or wap
-            type: 'web',
             // 项目展示平台： pc or phone
             dev: 'pc',
+            // 标示作者信息，可不填写
+            auth: 'wangwu',
+            // 项目类型： web or wap
+            type: 'web',
             // 项目日期
             date: '2016-10-09',
             // 展示平台为 phone 时， 单位 px 转 rem 时的换算单位。
@@ -64,8 +76,17 @@ export default {
             // less\css\sass\postcss
             // 当前仍只支持前两种
             compileCss: 'less',
+            // 是否启动图片压缩，默认为不启用
+            // 该功能会影响开发过程中的响应速度
+            // 建议在项目开发完成后，发布时根据需要开启
+            minImg: false,
+            // 图片压缩等级，默认为3
+            // 可选值为 0-7 
+            minLevel: 3,
             // SVN地址
-            svn: ''
+            svn: '',
+            // 备注说明
+            remark: '',
         },
         //...
     ]
@@ -77,7 +98,52 @@ export default {
 任务参数包括：  
 pro  指定任务所对应的项目名称，对应于项目配置中的 pro.name；  
 sn   指定任务所对应的项目编号，对应于项目配置中的 pro.sn；
-### 4.1 初始化任务
+
+### 4.1 新建项目  
+````bash
+gulp n
+````
+
+该命令会引导用户分项输入配置值，类似如下输出：
+```text
+gulp n
+[14:07:57] Requiring external module babel-register
+==================================================================
+-- 新建项目
+[14:08:05] Using gulpfile C:\project\aipro\gulpfile.babel.js
+[14:08:06] Starting 'n'...
+[14:08:06] Finished 'n' after 16 ms
+? 请输入你新建项目编码（如：2017-HN001）：
+Error:: 项目SN码不能为空！！！
+? 请输入你新建项目编码（如：2017-HN001）： 2017-HN001
+Info:: 新项目SN码为 2017-HN001
+? 请输入你新建项目名称（如：hnwap）： hntest
+Info:: 新项目名称为 hntest
+? 请输入你新建项目名称（如：湖南移动-WAP厅）： 湖南移动-测试
+Info:: 新项目标题为 湖南移动-测试
+? 请选择该项目的主要展示端： (Use arrow keys)
+> PC端
+  移动端
+```
+执行完成后，会在 [src\common\config\pro] 目录下生成相关的配置文件
+该目录下的文件主要是用于配置单个项目的信息。
+文件命名规则为：
+aipro-[项目编号]-[项目名称]-conf.json
+e.g  aipro-2017-HN001-hntest-conf.json
+配置文件的内容如下所示：
+```
+{ sn: '2017-HN001',
+  name: 'hntest',
+  title: '湖南移动-测试',
+  type: 'web',
+  dev: 'pc',
+  date: '2017-01-01',
+  remUnit: 75,
+  compileCss: 'less',
+  svn: '' }
+```
+
+### 4.2 初始化任务
 ```bash
 gulp init --pro gqkuandai
 # or
@@ -118,7 +184,8 @@ www
         |-lib
           |-...
 ```
-### 4.2 项目监控任务
+
+### 4.3 项目监控任务
 ```bash
 gulp default --pro xxxx
 # or 
@@ -130,7 +197,7 @@ gulp --sn xxxx
 ```
 用于监控项目开发过程中，项目代码的变动，实现实时编译、刷新及浏览器同步，浏览器的同步服务端口号为：3000
 
-### 4.3 项目编译任务
+### 4.4 项目编译任务
 ```bash
 gulp make --pro xxxx
 # or
@@ -138,7 +205,7 @@ gulp make --sn xxxx
 ```
 用于编译开发过程中，模块化样式编写方式时，将各分文件合并，并解析其样式变量等。
 
-### 4.4 项目发布任务
+### 4.5 项目发布任务
 ```bash
 gulp dist --pro xxxx
 # or 
@@ -146,7 +213,7 @@ gulp dist --sn xxxx
 ```
 当项目开发完成后，我们模块化开发方式的各文件通过编译及解析，并将相关文件统一打包为ZIP文件，完整输出静态文件，以此来规避发布过程中的犯错机率，以及分发时的方便性快捷性。
 
-### 4.5 项目归档任务
+### 4.6 项目归档任务
 ```bash
 gulp archive --pro xxxx
 # or
@@ -161,7 +228,7 @@ gulp archive:del --pro xxxx
 gulp archive:del --sn xxxx
 ```
 
-### 4.6 项目重加载任务
+### 4.7 项目重加载任务
 ```bash
 gulp reload --pro xxxx
 # or
@@ -169,7 +236,7 @@ gulp reload --sn xxxx
 ```
 这是归档任务的反操作，当我们将某一项目归档处理后，可能后期的某个时间点，我们仍需要处理这个项目，但当前的项目文件已被归档，开发IDE对于它已不工作，因此，这里通过这个任务，重新将已归档的任务重新加载到环境中。
 
-### 4.7 项目删除任务
+### 4.8 项目删除任务
 ```bash
 gulp delpro --pro xxxx
 # or
@@ -179,7 +246,7 @@ gulp delpro --sn xxxx
 本操作需要非常小心，除非十分明确，本项目的源码已不再需要，否则请不要执行本任务。本操作的执行结果，会彻底清空该项目的源码，清除后，无法恢复。  
 当不太确定是否还需要该项目的源码存在于IDE中时，但又不想该项目的相关代码对自己当前工作产生干扰，此种情况下，最好选择归档操作。
 
-### 4.8 自动化构建工具源码发布任务
+### 4.9 自动化构建工具源码发布任务
 ```bash
 gulp release
 ```
@@ -190,15 +257,15 @@ releases/0.0.x/*
 releases/aiui-frame-0.0.x-2016xxxxxxxxxx.zip
 ```
 
-### 4.9 项目列表任务
+### 4.10 项目列表任务
 ```bash
-gulp list
+gulp list:pro
 ```
 当整体的项目工程中，任务配置数量经积累较多后，整个工程中的项目会很多，在某个时候我们有可能需要查看工程中所有的项目信息，这时，可以通过该任务查看工程中的项目列表信息。
 
 如：
 ```text
-gulp list
+gulp list:pro
 [00:43:54] Requiring external module babel-register
 [00:43:54] Working directory changed to C:\project\aiui_dev
 ==================================================================
@@ -227,9 +294,9 @@ Surport Device Type:: pc
 ```
 以上是 list 任务的一个完整输出的实例。
 
-### 4.10 某项目包含页面列表任务
+### 4.11 某项目包含页面列表任务
 ```bash
-gulp listpages
+gulp list:pages
 ```
 用于列出某一项目中，包含的所有页面配置信息。
 ```text
@@ -266,7 +333,7 @@ Device Type:: pc
 ```
 从以上实例可以看到，当前项目中包含两个页面：index.html  fuli.html
 
-### 4.11 项目信息搜索任务
+### 4.12 项目信息搜索任务
 ```bash
 gulp search --key xxxx
 ```
@@ -300,6 +367,31 @@ Surport Device Type:: pc
 以上为一个搜索关键词为：陕西，的项目搜索命令实例。
 
 
+### 4.13 项目依赖库管理任务
+```bash
+gulp i --pro xxxx
+```
+
+如下输出：
+```text
+gulp i --pro sxjtkd
+[15:20:48] Requiring external module babel-register
+[15:20:48] Working directory changed to C:\project\aipro
+==================================================================
+-- sxjtkd 项目依赖库安装
+[15:20:52] Using gulpfile C:\project\aipro\gulpfile.babel.js
+[15:20:52] Starting 'i'...
+[15:20:52] Finished 'i' after 11 ms
+? 请选择操作： (Use arrow keys)
+> 安装库
+  卸载库
+  退出
+```
+
+本任务主要用于安装和卸载相关使用库，如：jquery, swiper等。  
+库的安装目录为：  
+www\static\[项目名称]\src\lib
+
 ## 5. 项目开发流程
 在所有工具提供出来后，所给出的最为重要的是一种解决问题的思路。  
 在本工具中，在开发项目过程中设计了一种大体的任务流程。  
@@ -311,8 +403,10 @@ Surport Device Type:: pc
 2. 执行项目初始化任务，初始化自动生成相关项目目录结构及初始化文件；
 3. 分析项目页面组成，及各页面相关的数据配置；
 4. 项目开发及调试；
-5. 开发完成，打包及发布；
+5. 开发完成，打包及发布；  
+
 ---
+
 以下将以陕西客户关怀项目为例，实例讲解使用过程
 ### 5.1 项目信息确定及配置
 项目信息为：
@@ -329,9 +423,16 @@ SVN地址：
 
 ```
 
+执行新建项目配置任务
+```bash
+gulp n
+```
+
 项目配置文件路径：
 ```bash
 src/common/config/aipro_liyz.js
+# or
+src/common/config/pro/aipro-2017-SN03-sxwt-conf.json
 ```
 
 配置信息
@@ -352,6 +453,7 @@ export default {
     ]
 }
 ```
+
 ### 5.2 项目初始化
 在项目根目录下执行
 ```bash
