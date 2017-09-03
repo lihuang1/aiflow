@@ -462,7 +462,7 @@ gulp init --pro sxwt
 gulp init --sn 2016-SN03
 ```
 
-### 5.3 分析面组成
+### 5.3 分析页面组成
 
 首页： index  
 福利页： fuli

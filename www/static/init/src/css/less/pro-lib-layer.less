@@ -1,0 +1,111 @@
+// the project base stylesheet
+//
+@import "pro-lib-var.less";
+
+/* 扩展layer的动画效果，支持滑出：left / right / down */
+/* layer slide left */
+@-webkit-keyframes layui-m-anim-left {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-800px); /*no*/
+    transform: translateX(-800px); /*no*/
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+@keyframes layui-m-anim-left {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-800px); /*no*/
+    transform: translateX(-800px); /*no*/
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+.layui-m-anim-left {
+  -webkit-animation-name: layui-m-anim-left;
+  animation-name: layui-m-anim-left;
+}
+
+/* layer slide right */
+@-webkit-keyframes layui-m-anim-right {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(800px); /*no*/
+    transform: translateX(800px); /*no*/
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+@keyframes layui-m-anim-right {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(800px); /*no*/
+    transform: translateX(800px); /*no*/
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+.layui-m-anim-right {
+  -webkit-animation-name: layui-m-anim-right;
+  animation-name: layui-m-anim-right;
+}
+
+/* layer slide down */
+@-webkit-keyframes layui-m-anim-down {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-800px); /*no*/
+    transform: translateY(-800px); /*no*/
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes layui-m-anim-down {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-800px); /*no*/
+    transform: translateY(-800px); /*no*/
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+.layui-m-anim-down {
+  -webkit-animation-name: layui-m-anim-down;
+  animation-name: layui-m-anim-down;
+}
+
+.layui-m-layerchild {
+  background: none !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  max-width: inherit !important;
+  padding: 0 !important;
+  .layui-m-layercont {
+    padding: 0 !important;
+  }
+}
