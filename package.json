@@ -42,6 +42,7 @@
     "gulp-css-spritesmith": "0.0.5",
     "gulp-decompress": "^2.0.1",
     "gulp-group-files": "^2.0.0",
+    "gulp-help": "^1.6.1",
     "gulp-imagemin": "^3.1.1",
     "gulp-json-editor": "^2.2.1",
     "gulp-less": "^3.3.0",
@@ -61,7 +62,7 @@
     "postcss-cssnext": "3.x.x",
     "postcss-custom-media": "6.x.x",
     "postcss-discard-comments": "^2.0.4",
-    "postcss-import": "10.x.x",
+    "postcss-import": "11.x.x",
     "postcss-px2rem": "^0.3.0",
     "vinyl-fs": "^2.4.4",
     "vinyl-paths": "^2.1.0"
